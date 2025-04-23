@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة تخمين الرقم</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>لعبة تخمين الرقم</h1>
+        <p>خمن رقمًا بين 1 و100</p>
+        <input type="number" id="guessInput" placeholder="أدخل تخمينك">
+        <button onclick="checkGuess()">تحقق</button>
+        <p id="message"></p>
+        <p id="attempts">عدد المحاولات: 0</p>
+        <button onclick="resetGame()" style="display: none;" id="resetButton">ابدأ من جديد</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    direction: rtl;
+}
+
+.container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    width: 150px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#message, #attempts {
+    font-size: 18px;
+    margin: 10px 0;
+}
+let randomNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+
+function checkGuess() {
+    const guessInput = document.getElementById('guessInput');
+    const message = document.getElementById('message');
+    const attemptsDisplay = document.getElementById('attempts');
+    const resetButton = document.getElementById('resetButton');
+    const guess = Number(guessInput.value);
+
+    if (!guess || guess < 1 || guess > 100) {
+        message.textContent = 'أدخل رقمًا بين 1 و100!';
+        return;
+    }
+
+    attempts++;
+    attemptsDisplay.textContent = `عدد المحاولات: ${attempts}`;
+
+    if (guess === randomNumber) {
+        message.textContent = `مبروك! لقد خمنت الرقم ${randomNumber} في ${attempts} محاولات!`;
+        guessInput.disabled = true;
+        resetButton.style.display = 'block';
+    } else if (guess < randomNumber) {
+        message.textContent = 'الرقم أكبر! حاول مرة أخرى.';
+    } else {
+        message.textContent = 'الرقم أصغر! حاول مرة أخرى.';
+    }
+
+    guessInput.value = '';
+    guessInput.focus();
+}
+
+function resetGame() {
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    document.getElementById('guessInput').disabled = false;
+    document.getElementById('guessInput').value = '';
+    document.getElementById('message').textContent = '';
+    document.getElementById('attempts').textContent = 'عدد المحاولات: 0';
+    document.getElementById('resetButton').style.display = 'none';
+}
